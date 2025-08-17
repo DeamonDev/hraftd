@@ -1,7 +1,6 @@
 package store
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
 	"time"
@@ -10,14 +9,15 @@ import (
 // Test_StoreOpen tests that the store can be opened.
 func Test_StoreOpen(t *testing.T) {
 	s := New(false)
-	tmpDir, _ := ioutil.TempDir("", "store_test")
+	tmpDir, _ := os.MkdirTemp("", "store_test")
 	defer os.RemoveAll(tmpDir)
 
-	s.RaftBind = "127.0.0.1:0"
-	s.RaftDir = tmpDir
 	if s == nil {
 		t.Fatalf("failed to create store")
 	}
+
+	s.RaftBind = "127.0.0.1:0"
+	s.RaftDir = tmpDir
 
 	if err := s.Open(false, "node0"); err != nil {
 		t.Fatalf("failed to open store: %s", err)
@@ -27,14 +27,15 @@ func Test_StoreOpen(t *testing.T) {
 // Test_StoreOpenSingleNode tests that a command can be applied to the log
 func Test_StoreOpenSingleNode(t *testing.T) {
 	s := New(false)
-	tmpDir, _ := ioutil.TempDir("", "store_test")
+	tmpDir, _ := os.MkdirTemp("", "store_test")
 	defer os.RemoveAll(tmpDir)
 
-	s.RaftBind = "127.0.0.1:0"
-	s.RaftDir = tmpDir
 	if s == nil {
 		t.Fatalf("failed to create store")
 	}
+
+	s.RaftBind = "127.0.0.1:0"
+	s.RaftDir = tmpDir
 
 	if err := s.Open(true, "node0"); err != nil {
 		t.Fatalf("failed to open store: %s", err)
@@ -76,14 +77,15 @@ func Test_StoreOpenSingleNode(t *testing.T) {
 // stored in RAM.
 func Test_StoreInMemOpenSingleNode(t *testing.T) {
 	s := New(true)
-	tmpDir, _ := ioutil.TempDir("", "store_test")
+	tmpDir, _ := os.MkdirTemp("", "store_test")
 	defer os.RemoveAll(tmpDir)
 
-	s.RaftBind = "127.0.0.1:0"
-	s.RaftDir = tmpDir
 	if s == nil {
 		t.Fatalf("failed to create store")
 	}
+
+	s.RaftBind = "127.0.0.1:0"
+	s.RaftDir = tmpDir
 
 	if err := s.Open(true, "node0"); err != nil {
 		t.Fatalf("failed to open store: %s", err)
@@ -123,14 +125,15 @@ func Test_StoreInMemOpenSingleNode(t *testing.T) {
 
 func Test_StoreStatus(t *testing.T) {
 	s := New(false)
-	tmpDir, _ := ioutil.TempDir("", "store_test")
+	tmpDir, _ := os.MkdirTemp("", "store_test")
 	defer os.RemoveAll(tmpDir)
 
-	s.RaftBind = "127.0.0.1:0"
-	s.RaftDir = tmpDir
 	if s == nil {
 		t.Fatalf("failed to create store")
 	}
+
+	s.RaftBind = "127.0.0.1:0"
+	s.RaftDir = tmpDir
 
 	if err := s.Open(true, "node0"); err != nil {
 		t.Fatalf("failed to open store: %s", err)

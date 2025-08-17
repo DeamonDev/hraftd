@@ -21,11 +21,13 @@ const (
 )
 
 // Command line parameters
-var inmem bool
-var httpAddr string
-var raftAddr string
-var joinAddr string
-var nodeID string
+var (
+	inmem    bool
+	httpAddr string
+	raftAddr string
+	joinAddr string
+	nodeID   string
+)
 
 func init() {
 	flag.BoolVar(&inmem, "inmem", false, "Use in-memory storage for Raft")
@@ -55,7 +57,7 @@ func main() {
 	if raftDir == "" {
 		log.Fatalln("No Raft storage directory specified")
 	}
-	if err := os.MkdirAll(raftDir, 0700); err != nil {
+	if err := os.MkdirAll(raftDir, 0o700); err != nil {
 		log.Fatalf("failed to create path for Raft storage: %s", err.Error())
 	}
 
