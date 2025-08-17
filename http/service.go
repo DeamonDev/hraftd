@@ -74,7 +74,6 @@ func (s *Service) Start() error {
 // Close closes the service.
 func (s *Service) Close() {
 	s.ln.Close()
-	return
 }
 
 // ServeHTTP allows Service to serve HTTP requests.
@@ -204,7 +203,6 @@ func (s *Service) handleKeyRequest(w http.ResponseWriter, r *http.Request) {
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
-	return
 }
 
 // Addr returns the address on which the Service is listening
