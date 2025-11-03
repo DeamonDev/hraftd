@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"strings"
 
-	store "github.com/otoolep/hraftd/store"
+	store "github.com/deamondev/hraftd/store"
 )
 
 // Store is the interface Raft-backed key-value stores must implement.

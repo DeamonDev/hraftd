@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/hraftd/src/github.com/otoolep/hraftd
+    working_directory: ~/hraftd/src/github.com/deamondev/hraftd
     docker:
       - image: cimg/go:1.22.0
     resource_class: large

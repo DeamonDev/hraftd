@@ -10,10 +10,10 @@ import (
 	"os"
 	"os/signal"
 
+	httpd "github.com/deamondev/hraftd/http"
+	"github.com/deamondev/hraftd/store"
 	"github.com/deamondev/raftinspector"
 	"github.com/deamondev/raftinspector/adapters/hashicorp"
-	httpd "github.com/otoolep/hraftd/http"
-	"github.com/otoolep/hraftd/store"
 )
 
 // Command line defaults
