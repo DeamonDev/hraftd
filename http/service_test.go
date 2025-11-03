@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	store "github.com/otoolep/hraftd/store"
+	store "github.com/deamondev/hraftd/store"
 )
 
 // Test_NewServer tests that a server can perform all basic operations.
