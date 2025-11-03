@@ -10,6 +10,8 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/deamondev/raftinspector"
+	"github.com/deamondev/raftinspector/adapters/hashicorp"
 	httpd "github.com/otoolep/hraftd/http"
 	"github.com/otoolep/hraftd/store"
 )
@@ -22,11 +24,12 @@ const (
 
 // Command line parameters
 var (
-	inmem    bool
-	httpAddr string
-	raftAddr string
-	joinAddr string
-	nodeID   string
+	inmem         bool
+	httpAddr      string
+	raftAddr      string
+	joinAddr      string
+	inspectorAddr uint64
+	nodeID        string
 )
 
 func init() {
@@ -34,6 +37,7 @@ func init() {
 	flag.StringVar(&httpAddr, "haddr", DefaultHTTPAddr, "Set the HTTP bind address")
 	flag.StringVar(&raftAddr, "raddr", DefaultRaftAddr, "Set Raft bind address")
 	flag.StringVar(&joinAddr, "join", "", "Set join address, if any")
+	flag.Uint64Var(&inspectorAddr, "iaddr", 50051, "Set raftinspector tcp port, if any")
 	flag.StringVar(&nodeID, "id", "", "Node ID. If not set, same as Raft bind address")
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s [options] <raft-data-path> \n", os.Args[0])
@@ -67,6 +71,16 @@ func main() {
 	if err := s.Open(joinAddr == "", nodeID); err != nil {
 		log.Fatalf("failed to open store: %s", err.Error())
 	}
+
+	adapter := hashicorp.NewHashiCorpAdapter(s.RaftNode(), s.LogStore, nodeID, raftAddr)
+	inspectorServer := raftinspector.NewServer(adapter)
+
+	go func() {
+		err := inspectorServer.Run("tcp", inspectorAddr)
+		if err != nil {
+			log.Fatalf("failed to start raft inspector server")
+		}
+	}()
 
 	h := httpd.New(httpAddr, s)
 	if err := h.Start(); err != nil {

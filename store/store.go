@@ -55,9 +55,14 @@ type Store struct {
 	mu sync.Mutex
 	m  map[string]string // The key-value store for the system.
 
-	raft *raft.Raft // The consensus mechanism
+	raft     *raft.Raft // The consensus mechanism
+	LogStore raft.LogStore
 
 	logger *log.Logger
+}
+
+func (s *Store) RaftNode() *raft.Raft {
+	return s.raft
 }
 
 // New returns a new Store.
@@ -86,7 +91,6 @@ func (s *Store) Open(enableSingle bool, localID string) error {
 	if err != nil {
 		return err
 	}
-
 	// Create the snapshot store. This allows the Raft to truncate the log.
 	snapshots, err := raft.NewFileSnapshotStore(s.RaftDir, retainSnapshotCount, os.Stderr)
 	if err != nil {
@@ -109,6 +113,8 @@ func (s *Store) Open(enableSingle bool, localID string) error {
 		logStore = boltDB
 		stableStore = boltDB
 	}
+
+	s.LogStore = logStore
 
 	// Instantiate the Raft systems.
 	ra, err := raft.NewRaft(config, (*fsm)(s), logStore, stableStore, snapshots, transport)
