@@ -2,13 +2,12 @@ module github.com/deamondev/hraftd
 
 go 1.25.3
 
-replace github.com/deamondev/raftinspector => ../raftinspector/
+replace github.com/deamondev/raftexporter => ../raftexporter/
 
 require (
-	github.com/deamondev/raftinspector v0.0.0-00010101000000-000000000000
+	github.com/deamondev/raftexporter v0.0.0-00010101000000-000000000000
 	github.com/hashicorp/raft v1.7.3
 	github.com/hashicorp/raft-boltdb/v2 v2.3.1
-	github.com/otoolep/hraftd v0.0.0-20250817132209-b931e1f8956e
 )
 
 require (
